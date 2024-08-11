@@ -2,6 +2,7 @@ import basket.Basket;
 import command.UserCommand;
 import good.Good;
 import inter.GoodPrinter;
+import wallet.Wallet;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -10,6 +11,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Shop shop = Shop.getInstance();
+        Wallet wallet = Wallet.getInstance();
+        wallet.insertMoney(500); //Стартовый капитал
 
         System.out.println("Добро пожаловать в магазин Семёрочка");
         System.out.println("В нашем магазине представлен следующий каталог товаров : ");
@@ -109,12 +112,15 @@ public class Main {
 
 
     /**
-     * SOLID - O
-     * SOLID - D
-     * <p>
-     * Данный метод принимает интерфейс, который реализовывают различные классы для вывода товаров
+     * SOLID
+     * Open-closed principle - метод принимает интерфейс, а не конкретную реализацию
      */
     private static void printGoods(GoodPrinter goodPrinter) {
+        /**
+         * SOLID
+         * Dependency inversion principle
+         * Мы зависим только от интерфейса GoodPrinter, а не от деталей реализации
+         */
         goodPrinter.printGoods();
     }
 

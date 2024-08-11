@@ -2,9 +2,11 @@ package basket;
 
 import good.Good;
 import inter.GoodPrinter;
+import wallet.Wallet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Basket implements GoodPrinter {
     private static Basket instance;
@@ -34,9 +36,17 @@ public class Basket implements GoodPrinter {
     }
 
     public Order placeAnOrder() {
-        Order order = new Order(this.goods);
-        clearBasket();
-        return order;
+        Wallet wallet = Wallet.getInstance();
+        int orderPrice = this.goods.stream().map(Good::getPrice).toList().stream().reduce(0, Integer::sum);
+        if (wallet.pay(orderPrice)) {
+            Order order = new Order(this.goods);
+            clearBasket();
+            return order;
+        }
+        else {
+            System.out.println("У вас на счете недостаточно средств");
+            return null;
+        }
     }
 
     private void clearBasket() {
